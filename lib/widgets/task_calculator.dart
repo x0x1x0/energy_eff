@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TaskEnergyCostCalculator extends StatefulWidget {
-  final double currentPricePerMWh;
+  final double currentPricePerKWh;
   final double highEndRigPower =
       850.0; // Assuming this is the power for the high-end rig
 
-  const TaskEnergyCostCalculator({super.key, required this.currentPricePerMWh});
+  const TaskEnergyCostCalculator({super.key, required this.currentPricePerKWh});
 
   @override
   State<TaskEnergyCostCalculator> createState() =>
@@ -17,7 +17,7 @@ class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
   double _taskDurationHours = 1.0;
   double _customPower = 850.0;
   String _selectedPowerOption = 'High End Rig';
-  List<String> _powerOptions = ['High End Rig', 'Custom Input'];
+  final List<String> _powerOptions = ['High End Rig', 'Custom Input'];
   double? _energyCost;
 
   double getPowerConsumption() {
@@ -35,7 +35,7 @@ class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
 
     // Since the price is given per MWh and 1 MWh = 1000 kWh,
     // we divide the price per MWh by 1000 to get the price per kWh.
-    double pricePerKWh = widget.currentPricePerMWh / 100;
+    double pricePerKWh = widget.currentPricePerKWh;
 
     // Finally, calculate the cost by multiplying the power consumption in kWh by the price per kWh.
     return powerConsumptionKWh * pricePerKWh;
@@ -121,7 +121,7 @@ class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
             },
             child: const Text('Calculate'),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           if (_energyCost != null)
             Text(
               'Energy Cost for Task: ${_energyCost!.toStringAsFixed(2)} ct',

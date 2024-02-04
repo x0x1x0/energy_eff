@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.dark(
-          primary: Colors.amber,
-          secondary: Colors.amber,
+          primary: Color.fromRGBO(218, 160, 76, 1),
+
           // Specify the background color here
         ),
         // Additionally, set the scaffoldBackgroundColor for screens' default background
