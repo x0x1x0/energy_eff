@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class EnergyCostCalculator extends StatefulWidget {
   final double currentPricePerKWh;
 
-  const EnergyCostCalculator({Key? key, required this.currentPricePerKWh})
-      : super(key: key);
+  const EnergyCostCalculator({super.key, required this.currentPricePerKWh});
 
   @override
   State<EnergyCostCalculator> createState() => _EnergyCostCalculatorState();
@@ -155,25 +154,25 @@ class _EnergyCostCalculatorState extends State<EnergyCostCalculator> {
                           DataRow(cells: [
                             const DataCell(Text('Day')),
                             DataCell(Text(
-                                '${(_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) : 0).toStringAsFixed(2)}')),
+                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) : 0).toStringAsFixed(2))),
                             DataCell(Text('${_dayCost?.toStringAsFixed(2)}')),
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('Week')),
                             DataCell(Text(
-                                '${(_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 7 : 0).toStringAsFixed(2)}')),
+                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 7 : 0).toStringAsFixed(2))),
                             DataCell(Text('${_weekCost?.toStringAsFixed(2)}')),
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('Month')),
                             DataCell(Text(
-                                '${(_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 30 : 0).toStringAsFixed(2)}')),
+                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 30 : 0).toStringAsFixed(2))),
                             DataCell(Text('${_monthCost?.toStringAsFixed(2)}')),
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('Year')),
                             DataCell(Text(
-                                '${(_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 365 : 0).toStringAsFixed(2)}')),
+                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 365 : 0).toStringAsFixed(2))),
                             DataCell(Text('${_yearCost?.toStringAsFixed(2)}')),
                           ]),
                         ],

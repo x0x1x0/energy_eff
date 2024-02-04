@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:energy_eff/data/price_data.dart';
+import 'package:energy_eff/data/mwh_price_data.dart';
+
 
 class PriceChart extends StatelessWidget {
   final List<EnergyPrice> priceData;

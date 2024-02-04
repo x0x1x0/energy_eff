@@ -1,16 +1,17 @@
+import 'package:energy_eff/data/exposat_consumer_price.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:energy_eff/data/ren_signal.dart';
 import 'package:energy_eff/widgets/dash_rects.dart';
 import 'package:energy_eff/data/ren_shares.dart';
-import 'package:energy_eff/data/price_data.dart';
+import 'package:energy_eff/data/mwh_price_data.dart';
 import 'package:energy_eff/widgets/price_chart.dart';
 import 'package:energy_eff/widgets/ren_chart.dart';
 import 'package:energy_eff/widgets/task_calculator.dart';
 import 'package:energy_eff/widgets/cost_calculator.dart';
 
 class CalculatorMain extends StatefulWidget {
-  const CalculatorMain({Key? key}) : super(key: key);
+  const CalculatorMain({super.key});
 
   @override
   _CalculatorMainState createState() => _CalculatorMainState();
@@ -26,20 +27,28 @@ class _CalculatorMainState extends State<CalculatorMain> {
   }
 
   Future<dynamic> fetchAllData() async {
-    final priceData = EnergyPriceService().fetchPrices();
+    // Keep the existing calls
+    final priceData =
+        EnergyPriceService().fetchPrices(); // Existing price data for charts
     final renShareData = RenShareDailyAvgService().fetchRenShareDailyAvg();
     final renSignalData = RenSignalService().fetchRenSignal();
-    return Future.wait([priceData, renShareData, renSignalData]);
+
+    // Add the new EPEXsPriceService call
+    final currentPriceData = EPEXsPriceService()
+        .fetchPrices(); // New price data for current price per kWh
+
+    // Use Future.wait to wait for all futures to complete
+    return Future.wait(
+        [priceData, renShareData, renSignalData, currentPriceData]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        title: Text("24 Energy"), // Updated to display text instead of SVG
+        title: const Text("24 Energy"),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 51, 52, 69),
+        backgroundColor: const Color.fromARGB(255, 51, 52, 69),
         elevation: 4,
       ),
       body: Padding(
@@ -49,11 +58,18 @@ class _CalculatorMainState extends State<CalculatorMain> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
+                // Existing data for charts
                 final priceData = snapshot.data![0];
                 final renShareData = snapshot.data![1];
                 final renSignalData = snapshot.data![2];
-                double currentPricePerMWh = priceData.last.price;
-                double currentPricePerKWh = currentPricePerMWh / 1000;
+
+                // New current price data
+                final currentPriceData = snapshot.data![3];
+
+                // Assuming the last element of currentPriceData is the most recent
+                double currentPricePerKWh = currentPriceData.last.value /
+                    100; // Ensure this matches your actual data structure
+
                 int signal =
                     renSignalData.last.signal; // Process this data accordingly
 
@@ -83,7 +99,7 @@ class _CalculatorMainState extends State<CalculatorMain> {
                         child: EnergyCostCalculator(
                             currentPricePerKWh: currentPricePerKWh),
                       ),
-                      SizedBox(height: 32)
+                      const SizedBox(height: 32)
                     ],
                   ),
                 );
@@ -92,7 +108,7 @@ class _CalculatorMainState extends State<CalculatorMain> {
               }
             }
             // By default, show a loading spinner.
-            return Center(
+            return const Center(
                 child: CircularProgressIndicator(
               strokeCap: StrokeCap.round,
               strokeWidth: 5,

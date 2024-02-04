@@ -29,7 +29,7 @@ class CurrentPriceCard extends StatelessWidget {
         children: [
           Text(
             'Current Price',
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           Padding(
             padding: const EdgeInsets.all(4.0),
@@ -48,7 +48,7 @@ class CurrentPriceCard extends StatelessWidget {
 class SignalCard extends StatelessWidget {
   final int signal;
 
-  const SignalCard({Key? key, required this.signal}) : super(key: key);
+  const SignalCard({super.key, required this.signal});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class SignalCard extends StatelessWidget {
         children: [
           Text(
             'Energy Signal',
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -113,10 +113,10 @@ class DashCards extends StatelessWidget {
   final int signal; // Signal value
 
   const DashCards({
-    Key? key,
+    super.key,
     required this.currentPricePerKWh,
     required this.signal,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
