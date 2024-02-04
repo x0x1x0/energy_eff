@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Widget for displaying the current price
 class CurrentPriceCard extends StatelessWidget {
   final double currentPricePerKWh;
 
@@ -11,7 +10,7 @@ class CurrentPriceCard extends StatelessWidget {
     return Container(
       height: 100,
       padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.only(right: 4.0), // Space between the cards
+      margin: const EdgeInsets.only(right: 10.0),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -34,7 +33,7 @@ class CurrentPriceCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Text(
-              '${currentPricePerKWh.toStringAsFixed(2)} €',
+              '${currentPricePerKWh.toStringAsFixed(2)} ct',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
           ),
@@ -44,7 +43,6 @@ class CurrentPriceCard extends StatelessWidget {
   }
 }
 
-// Widget for displaying the signal
 class SignalCard extends StatelessWidget {
   final int signal;
 
@@ -52,8 +50,7 @@ class SignalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine color based on signal
-    Color color = Colors.grey; // Default color
+    Color color = Colors.grey;
     switch (signal) {
       case -1:
       case 0:
@@ -70,7 +67,7 @@ class SignalCard extends StatelessWidget {
     return Container(
       height: 100,
       padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.only(left: 4.0), // Space between the cards
+      margin: const EdgeInsets.only(left: 4.0),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -107,10 +104,9 @@ class SignalCard extends StatelessWidget {
   }
 }
 
-// Updated DashCards widget to use CurrentPriceCard and SignalCard
 class DashCards extends StatelessWidget {
-  final double currentPricePerKWh; // Passed from the parent widget
-  final int signal; // Signal value
+  final double currentPricePerKWh;
+  final int signal;
 
   const DashCards({
     super.key,
@@ -120,8 +116,6 @@ class DashCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Convert MWh to kWh
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(

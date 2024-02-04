@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:energy_eff/data/mwh_price_data.dart';
 
-
 class PriceChart extends StatelessWidget {
   final List<EnergyPrice> priceData;
 
@@ -14,13 +13,9 @@ class PriceChart extends StatelessWidget {
     DateTime now = DateTime.now();
     DateTime thirtyDaysAgo = now.subtract(const Duration(days: 30));
 
-    // Assuming priceData is not empty and prices are in €/MWh
-    double currentPricePerMWh =
-        priceData.last.price; // The last price might be the most current
-    double currentPricePerKWh =
-        currentPricePerMWh / 1000; // Convert €/MWh to €/kWh
+    double currentPricePerMWh = priceData.last.price;
+    double currentPricePerKWh = currentPricePerMWh / 1000;
 
-    // Preprocess data: Group by day and calculate average
     final Map<DateTime, double> dailyAverages = {};
     for (var price in priceData) {
       final date =
@@ -40,7 +35,7 @@ class PriceChart extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 200, // Adjusted for overall container
+          height: 200,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(

@@ -28,7 +28,6 @@ class EnergyPriceService {
     String formattedStart = formatDateTime(thirtyDaysagp);
     String formattedEnd = formatDateTime(twentyFourHoursAhead);
 
-    // Encoding the datetime string for the URL
     String encodedStart = Uri.encodeComponent(formattedStart);
     String encodedEnd = Uri.encodeComponent(formattedEnd);
 

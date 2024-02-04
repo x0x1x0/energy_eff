@@ -31,7 +31,7 @@ class RenShareDailyAvgService {
         renShareDailyAvgs.add(RenShareDailyAvg(day: days[i], data: data[i]));
       }
 
-      // Print fetched data to console
+      
       for (var avg in renShareDailyAvgs) {
         print('Day: ${avg.day}, Data: ${avg.data}');
       }

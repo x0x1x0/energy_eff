@@ -27,20 +27,36 @@ class _CalculatorMainState extends State<CalculatorMain> {
   }
 
   Future<dynamic> fetchAllData() async {
-    // Keep the existing calls
-    final priceData =
-        EnergyPriceService().fetchPrices(); // Existing price data for charts
+    final priceData = EnergyPriceService().fetchPrices();
     final renShareData = RenShareDailyAvgService().fetchRenShareDailyAvg();
     final renSignalData = RenSignalService().fetchRenSignal();
 
-    // Add the new EPEXsPriceService call
-    final currentPriceData = EPEXsPriceService()
-        .fetchPrices(); // New price data for current price per kWh
+    final currentPriceData = EPEXsPriceService().fetchPrices();
 
-    // Use Future.wait to wait for all futures to complete
     return Future.wait(
         [priceData, renShareData, renSignalData, currentPriceData]);
   }
+
+  // double calculateFinalPricePerKWh(double basePriceCents) {
+  //   double offshoreNetworkLevy = 0.591;
+  //   double concessionFee = 1.66;
+  //   double stromNEVSurcharge = 0.417;
+  //   double chpSurcharge = 0.357;
+  //   double electricityTax = 2.05;
+
+  //   double totalWithoutVATCents = basePriceCents +
+  //       offshoreNetworkLevy +
+  //       concessionFee +
+  //       stromNEVSurcharge +
+  //       chpSurcharge +
+  //       electricityTax;
+
+  //   double vatCents = totalWithoutVATCents * 0.19;
+
+  //   double finalPricePerKWhCents = totalWithoutVATCents + vatCents;
+
+  //   return finalPricePerKWhCents;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,21 +74,18 @@ class _CalculatorMainState extends State<CalculatorMain> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
-                // Existing data for charts
                 final priceData = snapshot.data![0];
                 final renShareData = snapshot.data![1];
                 final renSignalData = snapshot.data![2];
 
-                // New current price data
-                final currentPriceData = snapshot.data![3];
+                final List<EPEXsPrice> currentPriceData = snapshot.data![3];
 
-                // Assuming the last element of currentPriceData is the most recent
-                double currentPricePerKWh = currentPriceData.last.value /
-                    100; // Ensure this matches your actual data structure
+                double currentPricePerKWh = currentPriceData.last.value;
 
-                int signal =
-                    renSignalData.last.signal; // Process this data accordingly
+                // double finalPricePerKWh =
+                //     calculateFinalPricePerKWh(currentPricePerKWh);
 
+                int signal = renSignalData.last.signal;
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -90,10 +103,8 @@ class _CalculatorMainState extends State<CalculatorMain> {
                             renShareDailyAvgData: renShareData),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: TaskEnergyCostCalculator(
-                            currentPricePerKWh: currentPricePerKWh),
-                      ),
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: TaskEnergyCostCalculator()),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: EnergyCostCalculator(
@@ -107,7 +118,7 @@ class _CalculatorMainState extends State<CalculatorMain> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
             }
-            // By default, show a loading spinner.
+
             return const Center(
                 child: CircularProgressIndicator(
               strokeCap: StrokeCap.round,

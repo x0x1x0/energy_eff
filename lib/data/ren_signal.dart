@@ -20,8 +20,7 @@ class RenSignal {
 
 class RenSignalService {
   Future<List<RenSignal>> fetchRenSignal() async {
-    String url =
-        'https://api.energy-charts.info/signal'; // Ensure this is the correct URL
+    String url = 'https://api.energy-charts.info/signal';
 
     final response = await http.get(Uri.parse(url));
 

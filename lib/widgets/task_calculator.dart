@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TaskEnergyCostCalculator extends StatefulWidget {
-  final double currentPricePerKWh;
-  final double highEndRigPower =
-      850.0; // Assuming this is the power for the high-end rig
-
-  const TaskEnergyCostCalculator({super.key, required this.currentPricePerKWh});
+  const TaskEnergyCostCalculator({Key? key}) : super(key: key);
 
   @override
   State<TaskEnergyCostCalculator> createState() =>
@@ -14,35 +10,55 @@ class TaskEnergyCostCalculator extends StatefulWidget {
 
 class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
   double _workloadPercentage = 50.0;
-  double _taskDurationHours = 1.0;
-  double _customPower = 850.0;
+
   String _selectedPowerOption = 'High End Rig';
   final List<String> _powerOptions = ['High End Rig', 'Custom Input'];
-  double? _energyCost;
+
+  // Controllers for each TextFormField
+  final TextEditingController _currentPricePerKWhController =
+      TextEditingController(text: "0.30");
+  final TextEditingController _customPowerController =
+      TextEditingController(text: "850");
+  final TextEditingController _taskDurationHoursController =
+      TextEditingController(text: "1");
+
+  @override
+  void initState() {
+    super.initState();
+    // No additional setup required for initState
+  }
+
+  @override
+  void dispose() {
+    _currentPricePerKWhController.dispose();
+    _customPowerController.dispose();
+    _taskDurationHoursController.dispose();
+    super.dispose();
+  }
 
   double getPowerConsumption() {
-    double idlePower = 100;
+    double idlePower = 100; // Assuming an idle power consumption
     double maxPower = _selectedPowerOption == 'Custom Input'
-        ? _customPower
-        : widget.highEndRigPower;
+        ? double.parse(_customPowerController.text)
+        : 850.0;
     return idlePower + (_workloadPercentage / 100) * (maxPower - idlePower);
   }
 
   double calculateEnergyCost() {
-    // Power consumption in kWh = Power in watts * hours / 1000 (to convert watts to kilowatts)
-    double powerConsumptionKWh =
-        getPowerConsumption() * _taskDurationHours / 1000;
-
-    // Since the price is given per MWh and 1 MWh = 1000 kWh,
-    // we divide the price per MWh by 1000 to get the price per kWh.
-    double pricePerKWh = widget.currentPricePerKWh;
-
-    // Finally, calculate the cost by multiplying the power consumption in kWh by the price per kWh.
-    return powerConsumptionKWh * pricePerKWh;
+    final double currentPricePerKWh =
+        double.parse(_currentPricePerKWhController.text);
+    final double powerConsumptionKWh = getPowerConsumption() *
+        (_taskDurationHoursController.text.isEmpty
+            ? 1.0
+            : double.parse(_taskDurationHoursController.text)) /
+        1000;
+    return powerConsumptionKWh * currentPricePerKWh;
   }
 
   @override
   Widget build(BuildContext context) {
+    double _energyCost = calculateEnergyCost(); // Dynamically calculate cost
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -58,8 +74,7 @@ class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
         ],
       ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.center, // Align contents to the left
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('Workload Percentage: ${_workloadPercentage.round()}%',
               style: Theme.of(context).textTheme.titleMedium),
@@ -76,22 +91,26 @@ class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
             },
           ),
           TextFormField(
+            controller: _taskDurationHoursController,
             decoration: const InputDecoration(
                 labelText: 'Expected Task Duration (Hours)'),
             keyboardType: TextInputType.number,
-            initialValue: _taskDurationHours.toString(),
             onChanged: (value) {
               setState(() {
-                _taskDurationHours = double.tryParse(value) ?? 1.0;
+                // The state update is implicit due to recalculation in build method
               });
             },
           ),
           DropdownButton<String>(
-            isExpanded: true, // Ensure the dropdown takes the full width
+            isExpanded: true,
             value: _selectedPowerOption,
             onChanged: (String? newValue) {
               setState(() {
                 _selectedPowerOption = newValue!;
+                if (newValue == 'High End Rig') {
+                  _customPowerController.text =
+                      '850'; // Reset if going back to High End Rig
+                }
               });
             },
             items: _powerOptions.map<DropdownMenuItem<String>>((String value) {
@@ -103,30 +122,23 @@ class _TaskEnergyCostCalculatorState extends State<TaskEnergyCostCalculator> {
           ),
           if (_selectedPowerOption == 'Custom Input')
             TextFormField(
+              controller: _customPowerController,
               decoration: const InputDecoration(labelText: 'Custom Power (W)'),
               keyboardType: TextInputType.number,
-              initialValue: _customPower.toString(),
-              onChanged: (value) {
-                setState(() {
-                  _customPower = double.tryParse(value) ?? 850.0;
-                });
-              },
+              // No need to explicitly set state here; build method handles updates
             ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _energyCost = calculateEnergyCost();
-              });
-            },
-            child: const Text('Calculate'),
+          TextFormField(
+            controller: _currentPricePerKWhController,
+            decoration: const InputDecoration(labelText: 'Price per kWh (EUR)'),
+            keyboardType: TextInputType.number,
+
+            // No need to explicitly set state here; build method handles updates
           ),
-          const SizedBox(height: 16),
-          if (_energyCost != null)
-            Text(
-              'Energy Cost for Task: ${_energyCost!.toStringAsFixed(2)} ct',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+          const SizedBox(height: 20),
+          Text(
+            'Energy Cost for Task: ${_energyCost.toStringAsFixed(2)} EUR',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ],
       ),
     );

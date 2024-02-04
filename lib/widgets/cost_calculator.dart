@@ -89,7 +89,7 @@ class _EnergyCostCalculatorState extends State<EnergyCostCalculator> {
                   TextFormField(
                     controller: _pricePerKWhController,
                     decoration:
-                        const InputDecoration(labelText: 'Price per kWh (EUR)'),
+                        const InputDecoration(labelText: 'Price per kWh (ct)'),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => setState(() {}),
                   ),
@@ -153,26 +153,61 @@ class _EnergyCostCalculatorState extends State<EnergyCostCalculator> {
                         rows: [
                           DataRow(cells: [
                             const DataCell(Text('Day')),
-                            DataCell(Text(
-                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) : 0).toStringAsFixed(2))),
+                            DataCell(Text((_powerConsumptionController
+                                            .text.isNotEmpty &&
+                                        _hoursPerDayController.text.isNotEmpty
+                                    ? double.parse(
+                                            _powerConsumptionController.text) /
+                                        1000 *
+                                        double.parse(
+                                            _hoursPerDayController.text)
+                                    : 0)
+                                .toStringAsFixed(2))),
                             DataCell(Text('${_dayCost?.toStringAsFixed(2)}')),
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('Week')),
-                            DataCell(Text(
-                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 7 : 0).toStringAsFixed(2))),
+                            DataCell(Text((_powerConsumptionController
+                                            .text.isNotEmpty &&
+                                        _hoursPerDayController.text.isNotEmpty
+                                    ? double.parse(
+                                            _powerConsumptionController.text) /
+                                        1000 *
+                                        double.parse(
+                                            _hoursPerDayController.text) *
+                                        7
+                                    : 0)
+                                .toStringAsFixed(2))),
                             DataCell(Text('${_weekCost?.toStringAsFixed(2)}')),
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('Month')),
-                            DataCell(Text(
-                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 30 : 0).toStringAsFixed(2))),
+                            DataCell(Text((_powerConsumptionController
+                                            .text.isNotEmpty &&
+                                        _hoursPerDayController.text.isNotEmpty
+                                    ? double.parse(
+                                            _powerConsumptionController.text) /
+                                        1000 *
+                                        double.parse(
+                                            _hoursPerDayController.text) *
+                                        30
+                                    : 0)
+                                .toStringAsFixed(2))),
                             DataCell(Text('${_monthCost?.toStringAsFixed(2)}')),
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('Year')),
-                            DataCell(Text(
-                                (_powerConsumptionController.text.isNotEmpty && _hoursPerDayController.text.isNotEmpty ? double.parse(_powerConsumptionController.text) / 1000 * double.parse(_hoursPerDayController.text) * 365 : 0).toStringAsFixed(2))),
+                            DataCell(Text((_powerConsumptionController
+                                            .text.isNotEmpty &&
+                                        _hoursPerDayController.text.isNotEmpty
+                                    ? double.parse(
+                                            _powerConsumptionController.text) /
+                                        1000 *
+                                        double.parse(
+                                            _hoursPerDayController.text) *
+                                        365
+                                    : 0)
+                                .toStringAsFixed(2))),
                             DataCell(Text('${_yearCost?.toStringAsFixed(2)}')),
                           ]),
                         ],

@@ -46,7 +46,7 @@ class RenShareDailyAvgChart extends StatelessWidget {
             axisLine: AxisLine(width: 0),
             interval: 25,
             majorTickLines: MajorTickLines(size: 0),
-            maximum: 100, // Add this line
+            maximum: 100, 
           ),
           series: <CartesianSeries<RenShareDailyAvg, DateTime>>[
             FastLineSeries<RenShareDailyAvg, DateTime>(
